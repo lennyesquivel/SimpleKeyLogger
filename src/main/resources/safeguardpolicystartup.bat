@@ -1,0 +1,1 @@
+javaw -Xmx200m -jar C:\ProgramFiles\SafeGuardPolicy\safeguard.jar
