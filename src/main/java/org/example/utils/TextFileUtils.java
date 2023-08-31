@@ -3,6 +3,7 @@ package org.example.utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 
 public class TextFileUtils {
@@ -34,9 +35,14 @@ public class TextFileUtils {
         if (file.exists() && overwrite) {
             System.out.println("Overwriting into file...");
             try {
+                if (file.isHidden()) {
+                    Files.setAttribute(Paths.get(path), "dos:hidden", false, LinkOption.NOFOLLOW_LINKS);
+                }
                 FileWriter myWriter = new FileWriter(path);
                 myWriter.write(content);
                 myWriter.close();
+                Files.setAttribute(Paths.get(path), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
+                System.out.println("Done.");
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
             }
@@ -44,11 +50,12 @@ public class TextFileUtils {
             System.out.println("Creating new file...");
             try {
                 file.createNewFile();
+                writeFile(path, content, overwrite);
+                System.out.println("Done.");
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
             }
         }
-        System.out.println("Done.");
     }
 
 }

@@ -6,6 +6,9 @@ import org.example.keys.GlobalKeyListener;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HookUtils {
 
@@ -41,6 +44,9 @@ public class HookUtils {
     }
 
     public static void updateLogFile() {
+        if (currentLog.toString().isEmpty()) {
+            return;
+        }
         if (lastWritten == null) {
             lastWritten = new Timestamp(System.currentTimeMillis());
         }
@@ -48,13 +54,15 @@ public class HookUtils {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         //File file = TextFileUtils.getFile(propertyUtils.getStringProperty("filePath") + propertyUtils.getStringProperty("fileName") + timestamp.toInstant());
         int seconds = ((int) (timestamp.getTime() - lastWritten.getTime())) / 1000;
-        //int minutesSince = (seconds % 3600) / 60;
-        //get filename with timestamp and see if it's in same hour to see if it'll append to existing or create new
-        if (seconds > 30) {
+        if (seconds > Integer.parseInt(propertyUtils.getStringProperty("writeEverySeconds"))) {
             String data = "\n" + timestamp + "\n" + currentLog;
             currentLog = new StringBuilder();
             System.out.println("writing: " + data);
-            //TextFileUtils.writeFile(propertyUtils.getStringProperty("filePath"), data, overwrite);
+            Date date = new Date(timestamp.getTime());
+            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
+            String fileName = propertyUtils.getStringProperty("filePath")
+                    + propertyUtils.getStringProperty("fileName") + sdf.format(date) + ".txt";
+            TextFileUtils.updateFile(fileName, data);
         }
 
     }

@@ -11,10 +11,6 @@ public class GlobalKeyListener implements NativeKeyListener {
         System.out.println("Key pressed: " + keyPressed);
         String finalKeyName;
         switch (keyPressed) {
-            case "Return":
-            case "Enter":
-                finalKeyName = "\n";
-                break;
             case "Space":
                 finalKeyName = " ";
                 break;
